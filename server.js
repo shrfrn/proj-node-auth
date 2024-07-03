@@ -109,7 +109,7 @@ app.get('/api/user', (req, res) => {
 })
 
 app.get('/api/user/:userId', (req, res) => {
-    const {userId} = req.params
+    const { userId } = req.params
 
     userService.getById(userId)
         .then(user => res.send(user))

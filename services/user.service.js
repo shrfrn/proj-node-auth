@@ -24,13 +24,15 @@ function getLoginToken(user) {
 
 function validateToken(token) {
 	if (!token) return null
+    
 	const str = cryptr.decrypt(token)
 	const user = JSON.parse(str)
 	return user
 }
 
 function checkLogin({ username, password }) {
-	var user = users.find(user => user.username === username)
+    // You might want to remove the password validation for dev
+	var user = users.find(user => user.username === username && user.password === password)
 	if (user) {
 		user = {
 			_id: user._id,

@@ -5,8 +5,9 @@ export const userService = {
     signup,
     logout,
     getLoggedinUser,
+    
     getById,
-    getEmptyCredentials
+    getEmptyCredentials,
 }
 
 const KEY = 'userDB'

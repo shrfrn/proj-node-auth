@@ -1,7 +1,7 @@
 const BASE_URL = '/api/car/'
 const CAR_KEY = 'carDB'
 
-_createCars()
+// _createCars()
 
 export const carService = {
     query,
