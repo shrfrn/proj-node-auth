@@ -21,7 +21,6 @@ export function AppHeader() {
 
 	function onSetUser(user) {
 		setUser(user)
-		navigate('/')
 	}
 
 	return (
