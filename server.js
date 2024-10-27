@@ -53,14 +53,12 @@ app.get('/api/car/:carId', (req, res) => {
 })
 
 app.post('/api/car', (req, res) => {
-    const loggedinUser = userService.validateToken(req.cookies.loginToken)
-    if (!loggedinUser) return res.status(401).send('Cannot add car')
 
     const car = {
         vendor: req.body.vendor,
         speed: +req.body.speed,
     }
-    carService.save(car, loggedinUser)
+    carService.save(car)
         .then(savedCar => res.send(savedCar))
         .catch(err => {
             loggerService.error('Cannot save car', err)
@@ -69,15 +67,14 @@ app.post('/api/car', (req, res) => {
 })
 
 app.put('/api/car/:id', (req, res) => {
-    const loggedinUser = userService.validateToken(req.cookies.loginToken)
-    if (!loggedinUser) return res.status(401).send('Cannot update car')
 
     const car = {
         _id: req.params.id,
         vendor: req.body.vendor,
         speed: +req.body.speed,
+        owner: req.body.owner,
     }
-    carService.save(car, loggedinUser)
+    carService.save(car)
         .then(savedCar => res.send(savedCar))
         .catch(err => {
             loggerService.error('Cannot save car', err)
@@ -86,11 +83,9 @@ app.put('/api/car/:id', (req, res) => {
 })
 
 app.delete('/api/car/:carId', (req, res) => {
-    const loggedinUser = userService.validateToken(req.cookies.loginToken)
-    if (!loggedinUser) return res.status(401).send('Cannot remove car')
 
     const { carId } = req.params
-    carService.remove(carId, loggedinUser)
+    carService.remove(carId)
         .then(() => res.send('Removed!'))
         .catch(err => {
             loggerService.error('Cannot remove car', err)
@@ -130,7 +125,7 @@ app.post('/api/auth/login', (req, res) => {
                 res.cookie('loginToken', loginToken)
                 res.send(user)
             } else {
-                res.status(401).send('Invalid Credentials')
+                res.status(404).send('Invalid Credentials')
             }
         })
 })

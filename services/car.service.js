@@ -1,5 +1,5 @@
-
 import fs from 'fs'
+
 import { utilService } from './util.service.js'
 import { loggerService } from './logger.service.js'
 
@@ -32,26 +32,17 @@ function getById(carId) {
     return Promise.resolve(car)
 }
 
-function remove(carId, loggedinUser) {
+function remove(carId) {
     const idx = cars.findIndex(car => car._id === carId)
     if (idx === -1) return Promise.reject('No Such Car')
 
-    const car = cars[idx]
-    if (!loggedinUser.isAdmin &&
-        car.owner._id !== loggedinUser._id) {
-        return Promise.reject('Not your car')
-    }
     cars.splice(idx, 1)
     return _saveCarsToFile()
 }
 
-function save(car, loggedinUser) {
+function save(car) {
     if (car._id) {
         const carToUpdate = cars.find(currCar => currCar._id === car._id)
-        if (!loggedinUser.isAdmin &&
-            carToUpdate.owner._id !== loggedinUser._id) {
-            return Promise.reject('Not your car')
-        }
         carToUpdate.vendor = car.vendor
         carToUpdate.speed = car.speed
     } else {
@@ -63,7 +54,6 @@ function save(car, loggedinUser) {
     return _saveCarsToFile()
         .then(() => car)
 }
-
 
 function _saveCarsToFile() {
     return new Promise((resolve, reject) => {
