@@ -1,24 +1,25 @@
 .app-header {
+    display: flex;
+    align-items: center;
+
     background-color: var(--clr1);
     color: var(--clr2bg-light);
-    
 }
 
 .header-container {
     display: flex;
     align-items: center;
-
 }
 
-.header-container h1 {
+.app-header h1 {
     flex-grow: 1;
 }
 
 .app-nav {
     display: flex;
+    align-items: center;
     gap: 15px;
 }
-
 
 a.active {
     color: rgb(241, 212, 241);
@@ -26,9 +27,6 @@ a.active {
     text-decoration: underline;
 }
 
-
-@media (max-width: 720px) {
-    .app-header {
-        color: var(--clr2bg-light);
-    }
+.app-header .user {
+    margin-inline-start: 2em;
 }

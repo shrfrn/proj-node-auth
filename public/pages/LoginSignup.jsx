@@ -1,12 +1,16 @@
 const { useState } = React
+const { useNavigate } = ReactRouter
 
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 import { userService } from '../services/user.service.local.js'
 
-export function LoginSignup({ onSetUser }) {
+
+export function LoginSignup({ setLoggedinUser }) {
 
     const [isSignup, setIsSignUp] = useState(false)
     const [credentials, setCredentials] = useState(userService.getEmptyCredentials())
+    
+    const navigate = useNavigate()
 
     function handleChange({ target }) {
         const { name: field, value } = target
@@ -18,18 +22,35 @@ export function LoginSignup({ onSetUser }) {
         isSignup ? signup(credentials) : login(credentials)
     }
 
+    // function onSetUser(user) {
+    //     setLoggedinUser(user)
+    //     navigate('/')
+    // }
+
     function login(credentials) {
         userService.login(credentials)
-            .then(onSetUser)
-            .then(() => { showSuccessMsg('Logged in successfully') })
-            .catch((err) => { showErrorMsg('Oops try again') })
+            .then(user => {
+                setLoggedinUser(user)
+                showSuccessMsg('Logged in successfully')
+                navigate('/car')
+            })
+            .catch(err => { 
+                console.log(err)
+                showErrorMsg(`Couldn't login...`) 
+            })
     }
 
     function signup(credentials) {
         userService.signup(credentials)
-            .then(onSetUser)
-            .then(() => { showSuccessMsg('Signed in successfully') })
-            .catch((err) => { showErrorMsg('Oops try again') })
+            .then(user => {
+                setLoggedinUser(user)
+                showSuccessMsg('Signed in successfully')
+                navigate('/car')
+            })
+            .catch(err => { 
+                console.log(err)
+                showErrorMsg(`Couldn't signup...`) 
+            })
     }
 
     return (
