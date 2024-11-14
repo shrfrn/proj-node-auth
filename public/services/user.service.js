@@ -2,42 +2,14 @@ const STORAGE_KEY_LOGGEDIN_USER = 'loggedInUser'
 const BASE_URL = '/api/user/'
 
 export const userService = {
-    login,
-    signup,
-    logout,
-    getLoggedinUser,
-
+    query,
     getById,
     getEmptyCredentials
 }
 
-function login({ username, password }) {
-    return axios.post('/api/auth/login', { username, password })
+function query() {
+    return axios.get(BASE_URL)
         .then(res => res.data)
-        .then(user => {
-            _setLoggedinUser(user)
-            return user
-        })
-}
-
-function signup({ username, password, fullname }) {
-    return axios.post('/api/auth/signup', { username, password, fullname })
-        .then(res => res.data)
-        .then(user => {
-            _setLoggedinUser(user)
-            return user
-        })
-}
-
-function logout() {
-    return axios.post('/api/auth/logout')
-        .then(() => {
-            sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
-        })
-}
-
-function getLoggedinUser() {
-    return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
 }
 
 function getById(userId) {
@@ -51,10 +23,4 @@ function getEmptyCredentials() {
         password: '',
         fullname: ''
     }
-}
-
-function _setLoggedinUser(user) {
-    const userToSave = { _id: user._id, fullname: user.fullname }
-    sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(userToSave))
-    return userToSave
 }
