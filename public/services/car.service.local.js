@@ -1,6 +1,6 @@
 import { utilService } from './util.service.js'
 import { storageService } from './async-storage.service.js'
-import { userService } from './user.service.local.js'
+import { authService } from './auth.service.local.js'
 
 const CAR_KEY = 'carDB'
 _createCars()
@@ -48,7 +48,7 @@ function save(car) {
     if (car._id) {
         return storageService.put(CAR_KEY, car)
     } else {
-        car.owner = userService.getLoggedinUser()
+        car.owner = authService.getLoggedinUser()
         return storageService.post(CAR_KEY, car)
     }
 }
@@ -101,7 +101,7 @@ function _createCars() {
 function _createCar(vendor, maxSpeed = 250) {
     const car = getEmptyCar(vendor, maxSpeed)
     car._id = utilService.makeId()
-    car.owner = userService.getLoggedinUser()
+    car.owner = authService.getLoggedinUser()
     return car
 }
 

@@ -1,10 +1,10 @@
 const { Link } = ReactRouterDOM
 
-import { userService } from '../services/user.service.local.js'
+import { authService } from '../services/auth.service.local.js'
 import { CarPreview } from './CarPreview.jsx'
 
 export function CarList({ cars, onRemoveCar }) {
-	const user = userService.getLoggedinUser()
+	const user = authService.getLoggedinUser()
 
 	return <ul className="car-list">
         {cars.map(car => (
