@@ -9,7 +9,7 @@ export const authService = {
 }
 
 function checkLogin({ username, password }) {
-    return userService.getByName(username)
+    return userService.getByUsername(username)
         .then(user => {
             if (user && user.password === password) {
                 delete user.password

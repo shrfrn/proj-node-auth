@@ -131,7 +131,7 @@ app.post('/api/auth/login', (req, res) => {
 app.post('/api/auth/signup', (req, res) => {
     const credentials = req.body
     
-    userService.save(credentials)
+    userService.add(credentials)
         .then(user => {
             if (user) {
                 const loginToken = authService.getLoginToken(user)
@@ -141,6 +141,7 @@ app.post('/api/auth/signup', (req, res) => {
                 res.status(400).send('Cannot signup')
             }
         })
+        .catch(err => res.status(400).send('Username taken.'))
 })
 
 app.post('/api/auth/logout', (req, res) => {

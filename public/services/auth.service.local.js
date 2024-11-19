@@ -10,24 +10,17 @@ export const authService = {
 const STORAGE_KEY_LOGGEDIN_USER = 'loggedInUser'
 
 function login({ username, password }) {
-    return userService.getByName(username)
+    return userService.getByUsername(username)
         .then(user => {
             if (user && user.password === password) return _setLoggedinUser(user)
             return Promise.reject('Invalid login')
         })
 }
 
-// function login({ username, password }) {
-//     return userService.getByCredentials(username, password)
-//         .then(user => {
-//             if (user) return _setLoggedinUser(user)
-//             return Promise.reject('Invalid login')
-//         })
-// }
-
 function signup(user) {
     return userService.add(user)
         .then(_setLoggedinUser)
+        .catch(err => Promise.reject(err))
 }
 
 function logout() {

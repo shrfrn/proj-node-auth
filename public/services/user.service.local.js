@@ -3,8 +3,7 @@ import { storageService } from './async-storage.service.js'
 export const userService = {
     query,
     getById,
-    getByName,
-    getByCredentials,
+    getByUsername,
     add,
     getEmptyCredentials,
 }
@@ -19,24 +18,16 @@ function getById(userId) {
     return storageService.get(KEY, userId)
 }
 
-function getByName(username) {
+function getByUsername(username) {
     return storageService.query(KEY)
         .then(users => users.find(user => user.username === username))
-}
-
-function getByCredentials(username, password) {
-    return storageService.query(KEY)
-        .then(users => 
-            users.find(user => 
-                user.username === username && 
-                user.password === password))
 }
 
 function add(user) {
     const { username, password, fullname } = user
     if (!username || !password || !fullname) return Promise.reject('Missing credetials')
         
-    return getByName(username)
+    return getByUsername(username)
         .then(existingUser => {
             if (existingUser) return Promise.reject('Username taken')
 

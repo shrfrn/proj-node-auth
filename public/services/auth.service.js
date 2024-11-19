@@ -11,19 +11,13 @@ export const authService = {
 function login({ username, password }) {
     return axios.post(BASE_URL + 'login', { username, password })
         .then(res => res.data)
-        .then(user => {
-            _setLoggedinUser(user)
-            return user
-        })
+        .then(_setLoggedinUser)
 }
 
 function signup({ username, password, fullname }) {
     return axios.post(BASE_URL + 'signup', { username, password, fullname })
         .then(res => res.data)
-        .then(user => {
-            _setLoggedinUser(user)
-            return user
-        })
+        .then(_setLoggedinUser)
 }
 
 function logout() {
@@ -36,7 +30,9 @@ function getLoggedinUser() {
 }
 
 function _setLoggedinUser(user) {
-    const userToSave = { _id: user._id, fullname: user.fullname }
+    const { _id, fullname, isAdmin } = user
+    const userToSave = { _id, fullname, isAdmin }
+    
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(userToSave))
     return userToSave
 }
