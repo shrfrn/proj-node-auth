@@ -1,9 +1,9 @@
 const { Link, NavLink } = ReactRouterDOM
 const { useNavigate } = ReactRouter
 
-import { UserMsg } from './UserMsg.jsx'
 import { authService } from '../services/auth.service.local.js'
 import { showErrorMsg } from '../services/event-bus.service.js'
+import { UserMsg } from './UserMsg.jsx'
 
 export function AppHeader({ loggedinUser, setLoggedinUser }) {
 
@@ -32,7 +32,7 @@ export function AppHeader({ loggedinUser, setLoggedinUser }) {
                     !loggedinUser ? 
                     <NavLink to="/auth" >Login</NavLink> : 
                     <div className="user">
-                        <Link to={`/user/${loggedinUser._id}`}>{loggedinUser && loggedinUser.fullname}</Link>
+                        <Link to={`/user/${loggedinUser._id}`}>{loggedinUser.fullname}</Link>
                         <button onClick={onLogout}>logout</button>
                     </div>
                 }
