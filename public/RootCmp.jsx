@@ -2,7 +2,7 @@ const { useState } = React
 const Router = ReactRouterDOM.BrowserRouter
 const { Routes, Route, Navigate } = ReactRouterDOM
 
-import { userService } from './services/user.service.local.js'
+import { authService } from './services/auth.service.local.js'
 
 import { AppHeader } from './cmps/AppHeader.jsx'
 import { Team } from './cmps/Team.jsx'
@@ -16,7 +16,7 @@ import { Home } from './pages/Home.jsx'
 import { LoginSignup } from './pages/LoginSignup.jsx'
 
 export function RootCmp() {
-	const [loggedinUser, setLoggedinUser] = useState(userService.getLoggedinUser())
+	const [loggedinUser, setLoggedinUser] = useState(authService.getLoggedinUser())
 
 	return (
 		<Router>

@@ -1,20 +1,14 @@
 import fs from 'fs'
-import Cryptr from 'cryptr'
-
 import { utilService } from './util.service.js'
 
-const cryptr = new Cryptr(process.env.SECRET1 || 'secret-puk-1234')
 const users = utilService.readJsonFile('data/user.json')
 
 export const userService = {
 	query,
 	getById,
+	getByUsername,
 	remove,
-	save,
-
-	checkLogin,
-	getLoginToken,
-	validateToken,
+	add,
 }
 
 function query() {
@@ -26,13 +20,16 @@ function getById(userId) {
 	var user = users.find(user => user._id === userId)
 	if (!user) return Promise.reject('User not found!')
 
-	user = {
-		_id: user._id,
-		username: user.username,
-		fullname: user.fullname,
-	}
+    user = { ...user }
+    delete user.password
 
 	return Promise.resolve(user)
+}
+
+function getByUsername(username) {
+    // You might want to remove the password validation for dev
+	var user = users.find(user => user.username === username)
+    return Promise.resolve(user)
 }
 
 function remove(userId) {
@@ -40,43 +37,22 @@ function remove(userId) {
 	return _saveUsersToFile()
 }
 
-function save(user) {
-	user._id = utilService.makeId()
-	users.push(user)
-
-	return _saveUsersToFile()
-        .then(() => ({
-            _id: user._id,
-            fullname: user.fullname,
-            isAdmin: user.isAdmin,
-        }))
-}
-
-function checkLogin({ username, password }) {
-    // You might want to remove the password validation for dev
-	var user = users.find(user => user.username === username && user.password === password)
-	if (user) {
-		user = {
-			_id: user._id,
-			fullname: user.fullname,
-			isAdmin: user.isAdmin,
-		}
-	}
-	return Promise.resolve(user)
-}
-
-function getLoginToken(user) {
-	const str = JSON.stringify(user)
-	const encryptedStr = cryptr.encrypt(str)
-	return encryptedStr
-}
-
-function validateToken(token) {
-	if (!token) return null
+function add(user) {
     
-	const str = cryptr.decrypt(token)
-	const user = JSON.parse(str)
-	return user
+    return getByUsername(user.username) // Check if username exists...
+        .then(existingUser => {
+            if (existingUser) return Promise.reject('Username taken')
+
+            user._id = utilService.makeId()
+            // Later, we will call the authService here to encrypt the password
+            users.push(user)
+        
+            return _saveUsersToFile()
+                .then(() => {
+                    delete user.password
+                    return user
+                })
+        })
 }
 
 function _saveUsersToFile() {
