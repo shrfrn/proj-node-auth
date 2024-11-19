@@ -17,7 +17,7 @@ export function AppHeader({ loggedinUser, setLoggedinUser }) {
             })
             .catch(err => {
                 console.log(err)
-                showErrorMsg(`Couldn't logout...`)
+                showErrorMsg(`Couldn't logout`)
             })
     }
 
