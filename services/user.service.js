@@ -29,10 +29,6 @@ function getById(userId) {
 function getByUsername(username) {
     // You might want to remove the password validation for dev
 	var user = users.find(user => user.username === username)
-
-    user = { ...user }
-    delete user.password
-	
     return Promise.resolve(user)
 }
 
