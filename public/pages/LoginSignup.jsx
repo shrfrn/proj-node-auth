@@ -22,11 +22,6 @@ export function LoginSignup({ setLoggedinUser }) {
         isSignup ? signup(credentials) : login(credentials)
     }
 
-    // function onSetUser(user) {
-    //     setLoggedinUser(user)
-    //     navigate('/')
-    // }
-
     function login(credentials) {
         userService.login(credentials)
             .then(user => {
