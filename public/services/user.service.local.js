@@ -4,6 +4,7 @@ export const userService = {
     query,
     getById,
     getByName,
+    getByCredentials,
     add,
     getEmptyCredentials,
 }
@@ -21,6 +22,14 @@ function getById(userId) {
 function getByName(username) {
     return storageService.query(KEY)
         .then(users => users.find(user => user.username === username))
+}
+
+function getByCredentials(username, password) {
+    return storageService.query(KEY)
+        .then(users => 
+            users.find(user => 
+                user.username === username && 
+                user.password === password))
 }
 
 function add(user) {

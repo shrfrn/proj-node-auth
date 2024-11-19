@@ -17,6 +17,14 @@ function login({ username, password }) {
         })
 }
 
+// function login({ username, password }) {
+//     return userService.getByCredentials(username, password)
+//         .then(user => {
+//             if (user) return _setLoggedinUser(user)
+//             return Promise.reject('Invalid login')
+//         })
+// }
+
 function signup(user) {
     return userService.add(user)
         .then(_setLoggedinUser)
