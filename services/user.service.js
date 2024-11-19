@@ -6,7 +6,7 @@ const users = utilService.readJsonFile('data/user.json')
 export const userService = {
 	query,
 	getById,
-	checkLogin,
+	getByName,
 	remove,
 	save,
 }
@@ -24,12 +24,19 @@ function getById(userId) {
 	return Promise.resolve(user)
 }
 
+function getByName(username) {
+    // You might want to remove the password validation for dev
+	var user = users.find(user => user.username === username)
+	return Promise.resolve(user)
+}
+
 function remove(userId) {
 	users = users.filter(user => user._id !== userId)
 	return _saveUsersToFile()
 }
 
 function save(user) {
+    // Check if username exists...
 	user._id = utilService.makeId()
 	users.push(user)
 
@@ -38,13 +45,6 @@ function save(user) {
             delete user.password
             return user
         })
-}
-
-function checkLogin({ username, password }) {
-    // You might want to remove the password validation for dev
-	var user = users.find(user => user.username === username && user.password === password)
-    delete user.password
-	return Promise.resolve(user)
 }
 
 function _saveUsersToFile() {

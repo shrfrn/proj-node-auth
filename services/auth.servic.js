@@ -1,9 +1,22 @@
 import Cryptr from 'cryptr'
+import { userService } from './user.service.js'
 const cryptr = new Cryptr(process.env.SECRET1 || 'secret-puk-1234')
 
-export const userService = {
+export const authService = {
+    checkLogin,
 	getLoginToken,
 	validateToken,
+}
+
+function checkLogin({ username, password }) {
+    return userService.getByName(username)
+        .then(user => {
+            if (user && user.password === password) {
+                delete user.password
+                return Promise.resolve(user)
+            }
+            return Promise.reject()
+        })
 }
 
 function getLoginToken(user) {
