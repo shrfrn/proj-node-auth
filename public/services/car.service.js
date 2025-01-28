@@ -26,7 +26,9 @@ function remove(carId) {
 
 function save(car) {
     const method = car._id ? 'put' : 'post'
-    return axios[method](BASE_URL, car).then(res => res.data)
+    const params = car._id ? `${car._id}` : ''
+
+    return axios[method](BASE_URL + params, car).then(res => res.data)
 }
 
 function getEmptyCar(vendor = '', speed = '') {
@@ -37,6 +39,5 @@ function getDefaultFilter() {
     return {
         txt: '',
         minSpeed: '',
-        pageIdx: 0
     }
 }
