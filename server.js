@@ -54,12 +54,14 @@ app.get('/api/car/:carId', (req, res) => {
 })
 
 app.post('/api/car', (req, res) => {
+    const loggedinUser = authService.validateToken(req.cookies.loginToken)
+    if (!loggedinUser) return res.status(401).send(`Can't add car`)
 
     const car = {
         vendor: req.body.vendor,
         speed: +req.body.speed,
     }
-    carService.save(car)
+    carService.save(car, loggedinUser)
         .then(savedCar => res.send(savedCar))
         .catch(err => {
             loggerService.error('Cannot save car', err)

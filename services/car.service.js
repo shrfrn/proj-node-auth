@@ -40,7 +40,7 @@ function remove(carId) {
     return _saveCarsToFile()
 }
 
-function save(car) {
+function save(car, loggedinUser) {
     if (car._id) {
         const carToUpdate = cars.find(currCar => currCar._id === car._id)
         carToUpdate.vendor = car.vendor
