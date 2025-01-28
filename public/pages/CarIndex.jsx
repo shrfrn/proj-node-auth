@@ -36,22 +36,9 @@ export function CarIndex() {
         setFilterBy(prevFilter => ({ ...prevFilter, ...filterBy }))
     }
 
-    function onChangePageIdx(diff) {
-        setFilterBy(prevFilter => {
-            return { ...prevFilter, pageIdx: prevFilter.pageIdx + diff || 0 }
-        })
-    }
-
     if (!cars) return <div>Loading...</div>
 
     return <section className="car-index">
-        
-        <button onClick={() => { onChangePageIdx(1) }}>+</button>
-        {filterBy.pageIdx !== undefined && filterBy.pageIdx + 1}
-        <button onClick={() => { onChangePageIdx(-1) }}>-</button>
-        
-        <button onClick={() => setFilterBy(prevFilter => ({ ...prevFilter, pageIdx: undefined }))}>Cancel pagination</button>
-
         <CarFilter filterBy={filterBy} onSetFilterBy={debouncedSetFilter.current} />
         <Link to="/car/edit" >Add Car</Link>
         <CarList cars={cars} onRemoveCar={onRemoveCar} />
