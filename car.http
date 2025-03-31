@@ -1,3 +1,8 @@
+### For automatic cookie support, make sure 
+### "rest-client.enableCookieStorage": true
+### in VS Code settings.json
+
+
 @baseUrl = http://127.0.0.1:3030/
 
 ### Car Endpoints
