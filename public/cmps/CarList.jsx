@@ -1,6 +1,6 @@
 const { Link } = ReactRouterDOM
 
-import { authService } from '../services/auth.service.local.js'
+import { authService } from '../services/auth.service.js'
 import { CarPreview } from './CarPreview.jsx'
 
 export function CarList({ cars, onRemoveCar }) {
@@ -14,6 +14,9 @@ export function CarList({ cars, onRemoveCar }) {
                     <button>
                         <Link to={`/car/${car._id}`}>Details</Link>
                     </button>
+
+                    {/* TODO: Render action buttons according to permitions */}
+                    
                     <div>
                         <button onClick={() => onRemoveCar(car._id)}>Remove Car</button>
                         <button>
