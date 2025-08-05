@@ -1,6 +1,7 @@
 import { utilService } from './util.service.js'
 import { storageService } from './async-storage.service.js'
 import { authService } from './auth.service.local.js'
+import { userService } from './user.service.local.js'
 
 const CAR_KEY = 'carDB'
 _createCars()
@@ -86,23 +87,37 @@ function getVendorStats() {
 }
 
 function _createCars() {
-    let cars = utilService.loadFromStorage(CAR_KEY)
-    if (!cars || !cars.length) {
-        cars = []
-        const vendors = ['audu', 'fiak', 'subali', 'mitsu']
-        for (let i = 0; i < 6; i++) {
-            const vendor = vendors[utilService.getRandomIntInclusive(0, vendors.length - 1)]
-            cars.push(_createCar(vendor, utilService.getRandomIntInclusive(80, 300)))
-        }
-        utilService.saveToStorage(CAR_KEY, cars)
+    let cars = utilService.loadFromStorage(CAR_KEY) || []
+    if (cars.length > 0) return
+
+    const vendors = ['audu', 'fiak', 'subali', 'mitsu']
+    const carPrms = []
+    
+    for (let i = 0; i < 6; i++) {
+        const vendor = vendors[utilService.getRandomInt(0, vendors.length)]
+
+        const prm = _createCar(vendor, utilService.getRandomIntInclusive(80, 260))
+        carPrms.push(prm)
     }
+
+    Promise.all(carPrms)
+        .then(cars => utilService.saveToStorage(CAR_KEY, cars)) 
 }
 
 function _createCar(vendor, maxSpeed = 250) {
-    const car = getEmptyCar(vendor, maxSpeed)
-    car._id = utilService.makeId()
-    car.owner = authService.getLoggedinUser()
-    return car
+    return userService.query()
+        .then(users => {
+            if (users.length === 0) return Promise.reject('No users... cant create demo data.')
+                
+            const car = getEmptyCar(vendor, maxSpeed)
+            car._id = utilService.makeId()
+
+            const idx = utilService.getRandomInt(0, users.length)
+            const { fullname, _id } = users[idx]
+            car.owner = { fullname, _id }
+
+            return car
+        })
 }
 
 function _setNextPrevCarId(car) {
