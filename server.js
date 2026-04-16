@@ -14,33 +14,6 @@ app.use(express.static('public'))
 app.use(cookieParser())
 app.use(express.json())
 
-// Express Routing:
-app.get('/puki', (req, res) => {
-    var visitCount = req.cookies.visitCount || 0
-    visitCount++
-    res.cookie('visitCount', visitCount)
-    res.cookie('lastVisitedCarId', 'c101', { maxAge: 60 * 60 * 1000 })
-
-    res.send('Hello Puki')
-})
-
-app.get('/nono', (req, res) => res.redirect('/'))
-
-app.get('/echo-cookies', (req, res) => {
-    var cookieCount = 0
-    var resStr = ''
-
-    for (const cookie in req.cookies) {
-        const cookieStr = `${cookie}: ${req.cookies[cookie]}`
-        console.log(cookieStr)
-        
-        resStr += cookieStr + '\n'
-        cookieCount++
-    }
-    resStr += `Total ${cookieCount} cookies`
-    res.send(resStr)
-})
-
 // REST API for Cars
 
 app.get('/api/car', (req, res) => {
@@ -168,8 +141,23 @@ app.post('/api/auth/logout', (req, res) => {
     res.send('logged-out!')
 })
 
-// Fallback route
-app.get('/**', (req, res) => {
+
+app.get('/echo-cookies', (req, res) => {
+    var cookieCount = 0
+    var resStr = ''
+
+    for (const cookie in req.cookies) {
+        const cookieStr = `${cookie}: ${req.cookies[cookie]}`
+        console.log(cookieStr)
+        
+        resStr += cookieStr + '\n'
+        cookieCount++
+    }
+    resStr += `Total ${cookieCount} cookies`
+    res.send(resStr)
+})
+
+app.get('{*splat}', (req, res) => {
     res.sendFile(path.resolve('public/index.html'))
 })
 
